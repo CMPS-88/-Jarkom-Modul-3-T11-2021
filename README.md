@@ -70,12 +70,37 @@ Kami mengatur dua buah range yaitu 10.47.1.20 sampai 10.47.1.99 dan 10.47.1.150 
 Client yang melalui Switch3 mendapatkan range IP dari [prefix IP].3.30 - [prefix IP].3.50
 
 ### Jawaban
+Untuk mengatur range IP, kami menggunakan pengaturan sebagai berikut pada file /etc/dhcp/dhcpd.conf di Jipangu
 
+```
+subnet 10.47.3.0 netmask 255.255.255.0 {
+    range 10.47.3.30 10.47.3.50;
+    option routers 10.47.3.1;
+    option broadcast-address 10.47.3.255;
+    option domain-name-servers 10.47.2.2;
+    default-lease-time 720;
+    max-lease-time 7200;
+}
+```
+Kami mengatur range yaitu 10.47.3.30 sampai 10.47.3.50, sedangkan untuk NID kami arahkan ke 10.47.3.0 yang merupakan IP Switch3, sehingga yang akan terpengaruh dengan konfigurasi tersebut hanyalah client yang terhubung dengan Switch3
 
 ## Soal 5
 Client mendapatkan DNS dari EniesLobby dan client dapat terhubung dengan internet melalui DNS tersebut.
 
 ### Jawaban
+Untuk mengonfigurasi kami mengarahkan option domain-name-servers ke 10.47.2.2 di file /etc/dhcp/dhcpd.conf (Jipangu) pada 2 subnet yang ada
+
+```option domain-name-servers 10.47.2.2;```
+
+Setelah itu pada EniesLobby sebagai DNS Server kita atur forwarders (agar bisa terhubung ke internet), comment dnssec-validation auto, dan tambahkan, allow-query{any;} pada file /etc/bind/named.conf.options, seperti berikut
+
+```
+forwarders {
+         192.168.122.1;
+};
+        //dnssec-validation auto;
+allow-query{any;};
+```
 
 ## Soal 6
 Lama waktu DHCP server meminjamkan alamat IP kepada Client yang melalui Switch1 selama 6 menit sedangkan pada client yang melalui Switch3 selama 12 menit. Dengan waktu maksimal yang dialokasikan untuk peminjaman alamat IP selama 120 menit.
