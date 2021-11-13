@@ -116,6 +116,31 @@ allow-query{any;};
 Lama waktu DHCP server meminjamkan alamat IP kepada Client yang melalui Switch1 selama 6 menit sedangkan pada client yang melalui Switch3 selama 12 menit. Dengan waktu maksimal yang dialokasikan untuk peminjaman alamat IP selama 120 menit.
 
 ### Jawaban
+Pertama kami mengatur konfigurasi pada switch 1 sebagai berikut
+
+```
+subnet 10.47.1.0 netmask 255.255.255.0 {
+    range 10.47.1.20 10.47.1.99;
+    range 10.47.1.150 10.47.1.169;
+    option routers 10.47.1.1;
+    option broadcast-address 10.47.1.255;
+    option domain-name-servers 10.47.2.2;
+    default-lease-time 360;
+    max-lease-time 7200;
+}
+```
+lalu kami mengatur pada switch 3 seperti berikut
+
+```
+subnet 10.47.3.0 netmask 255.255.255.0 {
+    range 10.47.3.30 10.47.3.50;
+    option routers 10.47.3.1;
+    option broadcast-address 10.47.3.255;
+    option domain-name-servers 10.47.2.2;
+    default-lease-time 720;
+    max-lease-time 7200;
+}
+```
 
 ## Soal 7
 Luffy dan Zoro berencana menjadikan Skypie sebagai server untuk jual beli kapal yang dimilikinya dengan alamat IP yang tetap dengan IP [prefix IP].3.69
