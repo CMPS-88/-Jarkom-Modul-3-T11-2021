@@ -10,6 +10,8 @@ Calvin Manuel | 05311940000049
 Luffy bersama Zoro berencana membuat peta tersebut dengan kriteria EniesLobby sebagai DNS Server, Jipangu sebagai DHCP Server, Water7 sebagai Proxy Server
 
 ### Jawaban
+Berikut adalah topologi yang telah kami buat
+<br> <img src="/ss/1.JPG">
 
 ## Soal 2
 Foosha sebagai DHCP Relay
@@ -35,6 +37,7 @@ INTERFACES="eth1 eth3 eth2"
 # Additional options that are passed to the DHCP relay daemon?
 OPTIONS=""
 ```
+<br> <img src="/ss/2.JPG">
 <br>
 Servers diisikan dengan IP dari Jipangu yang merupakan DHCP Server, sedangkan untuk Interfaces, dua interface pertama merupakan interface dimana Foosha akan menerima permintaan DHCP, sedangkan interface terakhir merupakan interface dimana permintaan tersebut akan di forward (interface yang terhubung dengan Jipangu). <br>
 Selanjutnya kita melakukan pengaturan di DHCP server, agar DHCP server mengerti bahwa DHCP harus di relay, dengan menambahkan pengaturan berikut pada file /etc/dhcp/dhcpd.conf
@@ -43,6 +46,8 @@ Selanjutnya kita melakukan pengaturan di DHCP server, agar DHCP server mengerti 
 subnet 10.47.2.0  netmask 255.255.255.0{
 }
 ```
+
+<br> <img src="/ss/3.JPG">
 
 Pada pengaturan ini, subnet diarahkan ke NID switch yang mengarah ke router Foosha, agar setiap pengaturan DHCP akan di relay ke Foosha
 
@@ -63,6 +68,7 @@ subnet 10.47.1.0 netmask 255.255.255.0 {
     max-lease-time 7200;
 }
 ```
+<br> <img src="/ss/4.JPG">
 
 Kami mengatur dua buah range yaitu 10.47.1.20 sampai 10.47.1.99 dan 10.47.1.150 dan 10.47.1.169, sedangkan untuk NID kami arahkan ke 10.47.1.0 yang merupakan IP Switch1, sehingga yang akan terpengaruh dengan konfigurasi tersebut hanyalah client yang terhubung dengan Switch1
 
@@ -82,6 +88,8 @@ subnet 10.47.3.0 netmask 255.255.255.0 {
     max-lease-time 7200;
 }
 ```
+<br> <img src="/ss/5.JPG">
+
 Kami mengatur range yaitu 10.47.3.30 sampai 10.47.3.50, sedangkan untuk NID kami arahkan ke 10.47.3.0 yang merupakan IP Switch3, sehingga yang akan terpengaruh dengan konfigurasi tersebut hanyalah client yang terhubung dengan Switch3
 
 ## Soal 5
@@ -101,6 +109,8 @@ forwarders {
         //dnssec-validation auto;
 allow-query{any;};
 ```
+
+<br> <img src="/ss/6.JPG">
 
 ## Soal 6
 Lama waktu DHCP server meminjamkan alamat IP kepada Client yang melalui Switch1 selama 6 menit sedangkan pada client yang melalui Switch3 selama 12 menit. Dengan waktu maksimal yang dialokasikan untuk peminjaman alamat IP selama 120 menit.
