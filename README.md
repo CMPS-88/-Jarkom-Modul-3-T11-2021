@@ -116,7 +116,7 @@ allow-query{any;};
 Lama waktu DHCP server meminjamkan alamat IP kepada Client yang melalui Switch1 selama 6 menit sedangkan pada client yang melalui Switch3 selama 12 menit. Dengan waktu maksimal yang dialokasikan untuk peminjaman alamat IP selama 120 menit.
 
 ### Jawaban
-Pertama kami mengatur konfigurasi pada switch 1 sebagai berikut
+Pertama kami mengatur konfigurasi pada switch 1 dengan menambahkan default lease time dan max default lease time sebagai berikut
 
 ```
 subnet 10.47.1.0 netmask 255.255.255.0 {
@@ -146,11 +146,22 @@ subnet 10.47.3.0 netmask 255.255.255.0 {
 Luffy dan Zoro berencana menjadikan Skypie sebagai server untuk jual beli kapal yang dimilikinya dengan alamat IP yang tetap dengan IP [prefix IP].3.69
 
 ### Jawaban
+Untuk menyelesaikan masalah ini caranya adalah kami menkonfigurasi Skypie sebagai host server dengan menkonfigurasi file pada /etc/dhcp/dhcpd.conf sebagai berikut
 
+```
+host Skypie {
+    hardware ethernet ae:4b:ec:5d:15:4d;
+    fixed-address 10.47.3.69;
+}
+```
 ## Soal 8
 Loguetown digunakan sebagai client Proxy agar transaksi jual beli dapat terjamin keamanannya, juga untuk mencegah kebocoran data transaksi. Pada Loguetown, proxy harus bisa diakses dengan nama jualbelikapal.yyy.com dengan port yang digunakan adalah 5000
 
 ### Jawaban
+caranya adalah dengan mengexport alamat ip pada Lougetown dari web tersebut dengan cara 
+```
+export http_proxy=http://10.47.2.3:5000
+```
 
 ## Soal 9
 Agar transaksi jual beli lebih aman dan pengguna website ada dua orang, proxy dipasang autentikasi user proxy dengan enkripsi MD5 dengan dua username, yaitu luffybelikapalyyy dengan password luffy_yyy dan zorobelikapalyyy dengan password zoro_yyy
