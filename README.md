@@ -178,21 +178,81 @@ htpasswd -b -m /etc/squid/passwd zorobelikapalt11 zoro_t11
 Transaksi jual beli tidak dilakukan setiap hari, oleh karena itu akses internet dibatasi hanya dapat diakses setiap hari Senin-Kamis pukul 07.00-11.00 dan setiap hari Selasa-Jum’at pukul 17.00-03.00 keesokan harinya (sampai Sabtu pukul 03.00)
 
 ### Jawaban
+Untuk melakukan hal tersebut kami menylesaikannya dengan cara berikut 
+```
+touch /etc/squid/acl.conf
+echo 'acl AVAILABLE_WORKING time MTWH 07:00-11:00' > /etc/squid/acl.conf
+echo 'acl AVAILABLE time TWHF 17:00-23:59' >> /etc/squid/acl.conf
+echo 'acl BISA time WHFA 00:00-03:00' >> /etc/squid/acl.conf
+sed -i '1i include /etc/squid/acl.conf' /etc/squid/squid.conf
+```
 
 ## Soal 11
 Agar transaksi bisa lebih fokus berjalan, maka dilakukan redirect website agar mudah mengingat website transaksi jual beli kapal. Setiap mengakses google.com, akan diredirect menuju super.franky.yyy.com dengan website yang sama pada soal shift modul 2. Web server super.franky.yyy.com berada pada node Skypie
 
 ### Jawaban
+Untuk melakukan redirect tersebut kami melakukannya  dengan cara sebagai berikut
+
+Pada Enies
+```
+echo 'zone "super.franky.t11.com" {
+        type master;
+        file "/etc/bind/super/super.franky.t11.com";
+};' >> /etc/bind/named.conf.local
+mkdir /etc/bind/super/
+cp /etc/bind/db.local /etc/bind/super/super.franky.t11.com
+echo ';
+; BIND data file for local loopback interface
+;
+$TTL    604800
+@       IN      SOA     super.franky.t11.com. root.super.franky.t11.com. (
+                              2         ; Serial
+                         604800         ; Refresh
+                          86400         ; Retry
+                        2419200         ; Expire
+                         604800 )       ; Negative Cache TTL
+;
+@       IN      NS      super.franky.t11.com.
+@       IN      A       10.47.3.69
+@       IN      AAAA    ::1' > /etc/bind/super/super.franky.t11.com
+```
+
+Pada Skypie
+```
+apt-get install apache2 -y
+apt-get install php -y
+apt-get install libapache2-mod-php7.0 -y
+apt-get install wget
+wget https://raw.githubusercontent.com/FeinardSlim/Praktikum-Modul-2-Jarkom/main/super.franky.zip
+apt-get install unzip
+unzip super.franky.zip
+mkdir /var/www/super.franky.t11.com
+mv  -v /super.franky/* /var/www/super.franky.t11.com
+sed -i "s_DocumentRoot /var/www/html_DocumentRoot /var/www/super.franky.t11.com_g" /etc/apache2/sites-available/000-default.conf
+sed -i "14iServerName super.franky.t11.com" /etc/apache2/sites-available/000-default.conf
+service apache2 restar
+```
 
 ## Soal 12
 Saatnya berlayar! Luffy dan Zoro akhirnya memutuskan untuk berlayar untuk mencari harta karun di super.franky.yyy.com. Tugas pencarian dibagi menjadi dua misi, Luffy bertugas untuk mendapatkan gambar (.png, .jpg), sedangkan Zoro mendapatkan sisanya. Karena Luffy orangnya sangat teliti untuk mencari harta karun, ketika ia berhasil mendapatkan gambar, ia mendapatkan gambar dan melihatnya dengan kecepatan 10 kbps
 
 ### Jawaban
+Untuk mendapatkan gambar tersebut kami melakukannya dengan cara berikut
+```
+acl magic_words url_regex -i \.png$ \.jpg$
+acl Good_Users proxy_auth luffybelikapalt11
+delay_pools 1
+delay_class 1 1
+delay_parameters 1 1250/2000
+delay_access 1 allow magic_words Good_Users
+delay_access 1 deny ALL
+```
 
 ## Soal 13
 Sedangkan, Zoro yang sangat bersemangat untuk mencari harta karun, sehingga kecepatan kapal Zoro tidak dibatasi ketika sudah mendapatkan harta yang diinginkannya
 
 ### Jawaban
+Dikarenakan zoro kecepatan kapalnya tidak dibatasi maka tidak diperlukan pengaturan apapun, namun berbeda dengan luffy yang dibatasi maka perlu adanya pengaturan, bisa dilihat pada no 12 
 
 ## Kendala
 1. Ada beberapa tools yang belum pernah kami ketahui seperti dhcp-relay sehingga kami harus mencari referensi dan mencoba-coba terlebih dahulu
