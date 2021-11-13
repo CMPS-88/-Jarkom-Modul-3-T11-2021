@@ -15,6 +15,34 @@ Luffy bersama Zoro berencana membuat peta tersebut dengan kriteria EniesLobby se
 Foosha sebagai DHCP Relay
 
 ### Jawaban
+Untuk membuat Foosha sebagai DHCP Relay kita menginstall ```isc-dhcp-relay``` tools ini berfungsi untuk menjadikan Foosha sebagai dhcp relay. Setelah menginstall kita mengonfigurasi file ```/etc/default/isc-dhcp-relay``` menjadi seperti berikut ini
+
+```
+# Defaults for isc-dhcp-relay initscript
+# sourced by /etc/init.d/isc-dhcp-relay
+# installed at /etc/default/isc-dhcp-relay by the maintainer scripts
+
+#
+# This is a POSIX shell fragment
+#
+
+# What servers should the DHCP relay forward requests to?
+SERVERS="10.47.2.4"
+
+# On what interfaces should the DHCP relay (dhrelay) serve DHCP requests?
+INTERFACES="eth1 eth3 eth2"
+
+# Additional options that are passed to the DHCP relay daemon?
+OPTIONS=""
+```
+<br>
+Servers diisikan dengan IP dari Jipangu yang merupakan DHCP Server, sedangkan untuk Interfaces, dua interface pertama merupakan interface dimana Foosha akan menerima permintaan DHCP, sedangkan interface terakhir merupakan interface dimana permintaan tersebut akan di forward (interface yang terhubung dengan Jipangu). <br>
+Selanjutnya kita melakukan pengaturan di DHCP server, agar DHCP server mengerti bahwa DHCP harus di relay, dengan menambahkan pengaturan berikut pada file ```/etc/dhcp/dhcpd.conf```
+```
+subnet 10.47.2.0  netmask 255.255.255.0{
+}
+```
+Pada pengaturan ini, subnet diarahkan ke NID switch yang mengarah ke router Foosha
 
 ## Soal 3
 Semua client yang ada HARUS menggunakan konfigurasi IP dari DHCP Server. Client yang melalui Switch1 mendapatkan range IP dari [prefix IP].1.20 - [prefix IP].1.99 dan [prefix IP].1.150 - [prefix IP].1.169
