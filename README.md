@@ -37,7 +37,7 @@ OPTIONS=""
 ```
 <br>
 Servers diisikan dengan IP dari Jipangu yang merupakan DHCP Server, sedangkan untuk Interfaces, dua interface pertama merupakan interface dimana Foosha akan menerima permintaan DHCP, sedangkan interface terakhir merupakan interface dimana permintaan tersebut akan di forward (interface yang terhubung dengan Jipangu). <br>
-Selanjutnya kita melakukan pengaturan di DHCP server, agar DHCP server mengerti bahwa DHCP harus di relay, dengan menambahkan pengaturan berikut pada file ```/etc/dhcp/dhcpd.conf```
+Selanjutnya kita melakukan pengaturan di DHCP server, agar DHCP server mengerti bahwa DHCP harus di relay, dengan menambahkan pengaturan berikut pada file /etc/dhcp/dhcpd.conf
 
 ```
 subnet 10.47.2.0  netmask 255.255.255.0{
