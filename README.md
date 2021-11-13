@@ -44,17 +44,33 @@ subnet 10.47.2.0  netmask 255.255.255.0{
 }
 ```
 
-Pada pengaturan ini, subnet diarahkan ke NID switch yang mengarah ke router Foosha
+Pada pengaturan ini, subnet diarahkan ke NID switch yang mengarah ke router Foosha, agar setiap pengaturan DHCP akan di relay ke Foosha
 
 ## Soal 3
 Semua client yang ada HARUS menggunakan konfigurasi IP dari DHCP Server. Client yang melalui Switch1 mendapatkan range IP dari [prefix IP].1.20 - [prefix IP].1.99 dan [prefix IP].1.150 - [prefix IP].1.169
 
 ### Jawaban
+Untuk mengatur range IP, kami menggunakan pengaturan sebagai berikut pada file /etc/dhcp/dhcpd.conf di Jipangu
+
+```
+subnet 10.47.1.0 netmask 255.255.255.0 {
+    range 10.47.1.20 10.47.1.99;
+    range 10.47.1.150 10.47.1.169;
+    option routers 10.47.1.1;
+    option broadcast-address 10.47.1.255;
+    option domain-name-servers 10.47.2.2;
+    default-lease-time 360;
+    max-lease-time 7200;
+}
+```
+
+Kami mengatur dua buah range yaitu 10.47.1.20 sampai 10.47.1.99 dan 10.47.1.150 dan 10.47.1.169, sedangkan untuk NID kami arahkan ke 10.47.1.0 yang merupakan IP Switch1, sehingga yang akan terpengaruh dengan konfigurasi tersebut hanyalah client yang terhubung dengan Switch1
 
 ## Soal 4
 Client yang melalui Switch3 mendapatkan range IP dari [prefix IP].3.30 - [prefix IP].3.50
 
 ### Jawaban
+
 
 ## Soal 5
 Client mendapatkan DNS dari EniesLobby dan client dapat terhubung dengan internet melalui DNS tersebut.
