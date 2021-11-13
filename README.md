@@ -153,3 +153,5 @@ Sedangkan, Zoro yang sangat bersemangat untuk mencari harta karun, sehingga kece
 ### Jawaban
 
 ## Kendala
+1. Ada beberapa tools yang belum pernah kami ketahui seperti dhcp-relay sehingga kami harus mencari referensi dan mencoba-coba terlebih dahulu
+2. Ada kesulitan ketika kami mencoba membatasi kecepatan ketika membuka png dan jpg karena sedikitnya referensi yang ada
